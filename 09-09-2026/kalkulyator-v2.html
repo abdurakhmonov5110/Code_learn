@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulyator Neumorphic / Glassmorphism Pro</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      user-select: none;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+      color: #f8fafc;
+      padding: 16px;
+    }
+
+    .calc-card {
+      position: relative;
+      width: 350px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(99, 102, 241, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .theme-tag {
+      font-size: 11px;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .screen {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 95px;
+    }
+
+    .history {
+      font-size: 13px;
+      color: #64748b;
+      min-height: 18px;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 400;
+    }
+
+    .display {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 36px;
+      font-weight: 600;
+      text-align: right;
+      outline: none;
+      overflow: hidden;
+      letter-spacing: -0.5px;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .btn {
+      height: 58px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      background: rgba(51, 65, 85, 0.4);
+      color: #e2e8f0;
+      font-size: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      background: rgba(71, 85, 105, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.3);
+      color: #ffffff;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-op {
+      background: rgba(99, 102, 241, 0.18);
+      color: #a5b4fc;
+      border-color: rgba(99, 102, 241, 0.3);
+      font-size: 22px;
+    }
+
+    .btn-op:hover {
+      background: rgba(99, 102, 241, 0.35);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-action {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.25);
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .btn-action:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-equal {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      font-weight: 700;
+      font-size: 24px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-equal:hover {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+      color: #ffffff;
+    }
+
+    .btn-equal:active {
+      transform: translateY(1px) scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calc-card">
+    <div class="card-header">
+      <div class="brand">
+        <span class="brand-dot"></span> SMART CALC
+      </div>
+      <span class="theme-tag">v2.0 Pro</span>
+    </div>
+
+    <div class="screen">
+      <div class="history" id="history"></div>
+      <input type="text" class="display" id="display" readonly value="0">
+    </div>
+
+    <div class="keypad">
+      <button class="btn btn-action" onclick="clearAll()">AC</button>
+      <button class="btn btn-action" onclick="deleteLast()">DEL</button>
+      <button class="btn btn-op" onclick="appendOperator('%')">%</button>
+      <button class="btn btn-op" onclick="appendOperator('/')">÷</button>
+
+      <button class="btn" onclick="appendNumber('7')">7</button>
+      <button class="btn" onclick="appendNumber('8')">8</button>
+      <button class="btn" onclick="appendNumber('9')">9</button>
+      <button class="btn btn-op" onclick="appendOperator('*')">×</button>
+
+      <button class="btn" onclick="appendNumber('4')">4</button>
+      <button class="btn" onclick="appendNumber('5')">5</button>
+      <button class="btn" onclick="appendNumber('6')">6</button>
+      <button class="btn btn-op" onclick="appendOperator('-')">−</button>
+
+      <button class="btn" onclick="appendNumber('1')">1</button>
+      <button class="btn" onclick="appendNumber('2')">2</button>
+      <button class="btn" onclick="appendNumber('3')">3</button>
+      <button class="btn btn-op" onclick="appendOperator('+')">+</button>
+
+      <button class="btn" onclick="appendNumber('0')">0</button>
+      <button class="btn" onclick="appendNumber('.')">.</button>
+      <button class="btn btn-equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const history = document.getElementById('history');
+    let shouldResetDisplay = false;
+
+    function appendNumber(num) {
+      if (display.value === '0' || shouldResetDisplay) {
+        display.value = num === '.' ? '0.' : num;
+        shouldResetDisplay = false;
+      } else {
+        if (num === '.' && display.value.includes('.')) return;
+        display.value += num;
+      }
+    }
+
+    function appendOperator(op) {
+      if (shouldResetDisplay) shouldResetDisplay = false;
+      const lastChar = display.value.slice(-1);
+      if (['+', '-', '*', '/', '%'].includes(lastChar)) {
+        display.value = display.value.slice(0, -1) + op;
+      } else {
+        display.value += op;
+      }
+    }
+
+    function clearAll() {
+      display.value = '0';
+      history.textContent = '';
+      shouldResetDisplay = false;
+    }
+
+    function deleteLast() {
+      if (shouldResetDisplay) {
+        clearAll();
+        return;
+      }
+      display.value = display.value.slice(0, -1);
+      if (display.value === '' || display.value === '-') {
+        display.value = '0';
+      }
+    }
+
+    function calculate() {
+      try {
+        let expression = display.value;
+        history.textContent = expression + ' =';
+        
+        // % amali uchun almashtirish
+        let sanitized = expression.replace(/%/g, '/100');
+        
+        const result = Function('"use strict";return (' + sanitized + ')')();
+        if (Number.isFinite(result)) {
+          // Ko'p xonali kasr bo'lsa yaxlitlash
+          display.value = Math.round(result * 100000000) / 100000000;
+        } else {
+          display.value = 'Xato';
+        }
+        shouldResetDisplay = true;
+      } catch (e) {
+        display.value = 'Xato';
+        shouldResetDisplay = true;
+      }
+    }
+
+    // Klaviatura orqali boshqarish imkoniyati
+    document.addEventListener('keydown', (e) => {
+      if (!isNaN(e.key)) appendNumber(e.key);
+      if (['+', '-', '*', '/'].includes(e.key)) appendOperator(e.key);
+      if (e.key === '%') appendOperator('%');
+      if (e.key === '.' || e.key === ',') appendNumber('.');
+      if (e.key === 'Enter' || e.key === '=') calculate();
+      if (e.key === 'Backspace') deleteLast();
+      if (e.key === 'Escape') clearAll();
+    });
+  </script>
+
+</body>
+</html>
